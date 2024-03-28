@@ -1,0 +1,25 @@
+:root {
+    --font-body: "Biome Light", sans-serif;
+    --font-headline: "Biome", sans-serif;
+    /* colors */
+    --primary-color: #f0a868;
+    --secondary-color: #525b0f;
+    --tertiary-color: #a4b8c4;
+    --light-grey: #d0d0d0;
+    --dark-grey: #303030;
+
+    /* sizes */
+    --font-base: 18px;
+    --small-font: 0.8em;
+    --large-font: 1.2em;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.nav {
+    font-family: var(--font-headline);
+}
