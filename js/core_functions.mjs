@@ -1,8 +1,3 @@
-
-const timezoneURL = "https://raw.githubusercontent.com/dmfilipenko/timezones.json/master/timezones.json"
-
-var list = []
-const difference = []
 async function getTimezones(timezoneURL, timezone) {
     const response = await fetch(timezoneURL);
     const data = await response.json();
@@ -16,12 +11,13 @@ async function getTimezones(timezoneURL, timezone) {
 
     }
 }
+
 function currentTime() {
     const today = new Date();
     const days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    let d = today.getDate()
+    let d = today.getDay()
     let day = days[today.getDay()];
     let month = months[today.getMonth()];
     let year = today.getFullYear();
@@ -41,23 +37,18 @@ function checkTime(i) {
     return i;
 }
 
-currentTime();
-
 function destinationTime() {
     if (difference.length > 1) {
         difference.reverse()
         difference.pop()
-    }
-    else if (difference.length < 1) {
-        difference.push(2)
     }
     const offset = difference[0]
     const today = new Date();
     const days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    let d = today.getUTCDate()
-    let day = days[today.getUTCDay()];
+    let d = today.getUTCDay()
+    let day = days[d];
     let month = months[today.getUTCMonth()];
     let year = today.getUTCFullYear();
     let h = today.getUTCHours() + offset;
@@ -76,8 +67,6 @@ function destinationTime() {
     setTimeout(destinationTime, 1000);
 }
 
-destinationTime()
-
 function openNav() {
     document.querySelector(".sidebar").style.width = "250px";
     document.querySelector("#main").style.marginLeft = "250px";
@@ -87,15 +76,6 @@ function closeNav() {
     document.querySelector(".sidebar").style.width = "0";
     document.querySelector("#main").style.marginLeft = "0";
 }
-
-const menu = document.querySelector(".menu-button")
-menu.addEventListener("click", openNav)
-
-const close = document.querySelector(".closebtn")
-close.addEventListener("click", closeNav)
-
-
-const url = 'https://api.openweathermap.org/data/2.5/weather?lat=49.75&lon=6.64&appid=6f7485277746b0ae1a06c3ffc7583e18&units=imperial'
 
 async function currentWeather(url) {
     try {
@@ -117,6 +97,7 @@ async function destinationWeather(url) {
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json();
+            console.log(data)
             displayDestinationWeather(data);
         }
         else {
@@ -126,8 +107,6 @@ async function destinationWeather(url) {
         console.log(error);
     }
 }
-
-currentWeather(url);
 
 function displayCurrentWeather(data) {
     const currentTemp = document.querySelector('#current-temp');
@@ -163,14 +142,15 @@ function getInput() {
     localStorage.removeItem("City")
     const input = document.getElementById("input");
     const value = input.value;
-    localStorage.setItem("City", value.toUpperCase())
+    localStorage.setItem("City", value)
+    console.log(value)
     var search = value
 
     const apiUrl = 'https://booking-com.p.rapidapi.com/v1/hotels/locations?name=' + search + '&locale=en-gb';
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': '9f1ba8075cmsh22dffebf0d2fdb3p11dc0ejsn29c70f3053e0',
+            'X-RapidAPI-Key': 'cd0bfbc469msh417c78782b59dbbp1ad0f7jsn48d9886d60bc',
             'X-RapidAPI-Host': 'booking-com.p.rapidapi.com'
         }
     };
@@ -179,8 +159,9 @@ function getInput() {
         try {
             const response = await fetch(apiUrl, options);
             const result = await response.json();
-            localStorage.setItem("dest_id", result[0].dest_id)
+            console.log(result[1]);
             const timezone1 = result[1].timezone;
+            console.log(timezone1)
             getTimezones(timezoneURL, timezone1);
 
         } catch (error) {
@@ -213,13 +194,6 @@ function getInput() {
     }
 
     changeWeather(geocoding)
-    setTimeout(showContent, 2500)
+    setTimeout(showContent, 2000)
+    console.log(difference)
 }
-
-const button = document.getElementById("search")
-button.addEventListener("click", getInput)
-const booking = document.getElementById("search")
-booking.addEventListener("click", destinationTime)
-
-
-
