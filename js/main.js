@@ -70,7 +70,7 @@ function destinationTime() {
         difference.push(2)
     }
 
-    const offset = difference[0]
+
     const today = new Date();
     const days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -79,17 +79,25 @@ function destinationTime() {
     let day = days[today.getUTCDay()];
     let month = months[today.getUTCMonth()];
     let year = today.getUTCFullYear();
+    let m = today.getUTCMinutes();
+    let offset = difference[0]
+    if (offset !== Math.floor(offset)) {
+        console.log(offset)
+        offset = offset + 0.5
+        m = m + 30
+        if (m >= 60) {
+            m = m - 60
+        }
+    }
     let h = today.getUTCHours() + offset;
     if (h >= 24) {
         h = h - 24
         d = d + 1
-
     }
     else if (h <= -1) {
         h = h + 24
         d = d - 1
     }
-    let m = today.getUTCMinutes();
     let s = today.getUTCSeconds();
     d = checkTime(d);
     h = checkTime(h);
@@ -98,7 +106,6 @@ function destinationTime() {
 
     document.querySelector('.destination').innerHTML = "<br>Destination: <br>" + day + ", " + d + "/" + month + "/" + year + " " + h + ":" + m + ":" + s;
     setTimeout(destinationTime, 1000);
-
 }
 
 
@@ -190,6 +197,7 @@ function getInput() {
     localStorage.removeItem("city")
     const input = document.getElementById("input");
     const value = input.value;
+
     localStorage.setItem("city", value.toUpperCase())
     var search = value
 
