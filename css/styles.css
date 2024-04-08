@@ -209,7 +209,7 @@ figcaption {
 ul {
     display: grid;
     grid-template-columns: auto auto;
-    margin-left: 5%;
+    margin-left: 2%;
 }
 
 li {
@@ -225,6 +225,63 @@ li img {
 
 #loading {
     text-align: center;
+}
+
+#weather-cards img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0%;
+}
+
+#weather-cards {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+
+#weather-cards li {
+    margin-right: 30px;
+}
+
+.form {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.form button {
+    margin-top: 10px;
+    background-color: #0a2463;
+    color: white;
+}
+
+.form button:hover {
+    background-color: #fb3640;
+    color: black;
+}
+
+#flights h2 {
+    font-family: 'Orbitron', Arial, san-serif;
+}
+
+#flights {
+    margin-right: 30px;
+}
+
+#flights li {
+    border-color: #605f5e;
+    border-style: solid;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 20px;
+
+}
+
+#flights a:hover {
+    color: #0a2463;
+}
+
+#headings {
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 @media screen and (min-width: 900px) {
@@ -255,5 +312,13 @@ li img {
 
     ul {
         margin-left: 20%;
+    }
+
+    #weather-cards {
+        margin-left: 10%;
+    }
+
+    #flights {
+        margin-left: 0%;
     }
 }

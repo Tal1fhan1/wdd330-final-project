@@ -13,8 +13,8 @@ async function create() {
     ul2.setAttribute("id", "hotels")
     document.body.appendChild(ul2)
 
-    const newDest_id = localStorage.getItem("dest_id")
-    const url2 = "https://booking-com.p.rapidapi.com/v1/hotels/search?checkout_date=2024-09-15&order_by=popularity&filter_by_currency=AED&room_number=1&dest_id=" + newDest_id + "&dest_type=city&adults_number=2&checkin_date=2024-09-14&locale=en-gb&units=metric&include_adjacency=true&children_number=2&categories_filter_ids=class%3A%3A2%2Cclass%3A%3A4%2Cfree_cancellation%3A%3A1&page_number=0&children_ages=5%2C0";
+    const newDestId = localStorage.getItem("dest_id")
+    const url2 = "https://booking-com.p.rapidapi.com/v1/hotels/search?checkout_date=2024-09-15&order_by=popularity&filter_by_currency=AED&room_number=1&dest_id=" + newDestId + "&dest_type=city&adults_number=2&checkin_date=2024-09-14&locale=en-gb&units=metric&include_adjacency=true&children_number=2&categories_filter_ids=class%3A%3A2%2Cclass%3A%3A4%2Cfree_cancellation%3A%3A1&page_number=0&children_ages=5%2C0";
     const options2 = {
         method: 'GET',
         headers: {
@@ -28,8 +28,7 @@ async function create() {
         const result = await response.json()
         loading.remove()
         hotelList = result.result
-        heading.innerHTML = `The Top ${hotelList.length} Hotels In ${localStorage.getItem('City')}`
-        console.log(hotelList.length)
+        heading.innerHTML = `The Top ${hotelList.length} Hotels In ${localStorage.getItem('city')}`
         for (let i = 0; i <= 19; i++) {
             hotelCardTemplate(result.result[i], ul2)
         }

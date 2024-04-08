@@ -1,8 +1,24 @@
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(getCoordinates);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+}
 
+function getCoordinates(position) {
+    localStorage.setItem("current latitude", position.coords.latitude)
+    localStorage.setItem("current longitude", position.coords.longitude)
+}
+
+const string = localStorage.getItem("location")
+
+getLocation()
 const timezoneURL = "https://raw.githubusercontent.com/dmfilipenko/timezones.json/master/timezones.json"
 
 var list = []
 const difference = []
+
 async function getTimezones(timezoneURL, timezone) {
     const response = await fetch(timezoneURL);
     const data = await response.json();
@@ -12,6 +28,8 @@ async function getTimezones(timezoneURL, timezone) {
         list.push(info)
         if (list[i].includes(timezone) == true) {
             difference.push(data[i].offset)
+            console.log(difference)
+
         }
 
     }
@@ -51,6 +69,7 @@ function destinationTime() {
     else if (difference.length < 1) {
         difference.push(2)
     }
+
     const offset = difference[0]
     const today = new Date();
     const days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
@@ -64,6 +83,11 @@ function destinationTime() {
     if (h >= 24) {
         h = h - 24
         d = d + 1
+
+    }
+    else if (h <= 24) {
+        h = h + 24
+        d = d - 1
     }
     let m = today.getUTCMinutes();
     let s = today.getUTCSeconds();
@@ -74,34 +98,37 @@ function destinationTime() {
 
     document.querySelector('.destination').innerHTML = "<br>Destination: <br>" + day + ", " + d + "/" + month + "/" + year + " " + h + ":" + m + ":" + s;
     setTimeout(destinationTime, 1000);
+
 }
+
 
 destinationTime()
 
-function openNav() {
+function openSidebar() {
     document.querySelector(".sidebar").style.width = "250px";
     document.querySelector("#main").style.marginLeft = "250px";
 }
 
-function closeNav() {
+function closeSidebar() {
     document.querySelector(".sidebar").style.width = "0";
     document.querySelector("#main").style.marginLeft = "0";
 }
 
 const menu = document.querySelector(".menu-button")
-menu.addEventListener("click", openNav)
+menu.addEventListener("click", openSidebar)
 
 const close = document.querySelector(".closebtn")
-close.addEventListener("click", closeNav)
+close.addEventListener("click", closeSidebar)
 
 
-const url = 'https://api.openweathermap.org/data/2.5/weather?lat=49.75&lon=6.64&appid=6f7485277746b0ae1a06c3ffc7583e18&units=imperial'
+const url = "https://api.openweathermap.org/data/2.5/weather?lat=" + localStorage.getItem("current latitude") + "&lon=" + localStorage.getItem("current longitude") + "&appid=6f7485277746b0ae1a06c3ffc7583e18&units=imperial";
 
 async function currentWeather(url) {
     try {
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json();
+            localStorage.setItem("location", data.name)
             displayCurrentWeather(data);
         }
         else {
@@ -160,10 +187,10 @@ function showContent() {
 
 function getInput() {
 
-    localStorage.removeItem("City")
+    localStorage.removeItem("city")
     const input = document.getElementById("input");
     const value = input.value;
-    localStorage.setItem("City", value.toUpperCase())
+    localStorage.setItem("city", value.toUpperCase())
     var search = value
 
     const apiUrl = 'https://booking-com.p.rapidapi.com/v1/hotels/locations?name=' + search + '&locale=en-gb';
@@ -190,7 +217,7 @@ function getInput() {
 
     searchApi(apiUrl)
 
-    const geocoding = "http://api.openweathermap.org/geo/1.0/direct?q=" + search + "&limit=1&appid=6f7485277746b0ae1a06c3ffc7583e18&units=imperial"
+    const geocoding = "https://api.openweathermap.org/geo/1.0/direct?q=" + search + "&limit=1&appid=6f7485277746b0ae1a06c3ffc7583e18&units=imperial"
 
     async function changeWeather() {
         try {
@@ -199,6 +226,8 @@ function getInput() {
                 const data = await response.json();
                 const latitude = `${data[0].lat}`
                 const longitude = `${data[0].lon}`
+                localStorage.setItem("destination latitude", latitude)
+                localStorage.setItem("destination longitude", longitude)
 
                 const destinationUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=6f7485277746b0ae1a06c3ffc7583e18&units=imperial"
                 destinationWeather(destinationUrl)
@@ -216,10 +245,8 @@ function getInput() {
     setTimeout(showContent, 2500)
 }
 
-const button = document.getElementById("search")
-button.addEventListener("click", getInput)
-const booking = document.getElementById("search")
-booking.addEventListener("click", destinationTime)
+const button = document.getElementById("search");
+button.addEventListener("click", getInput);
 
 
 
