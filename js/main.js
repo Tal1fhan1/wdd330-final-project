@@ -85,7 +85,7 @@ function destinationTime() {
         d = d + 1
 
     }
-    else if (h <= 24) {
+    else if (h <= -1) {
         h = h + 24
         d = d - 1
     }
